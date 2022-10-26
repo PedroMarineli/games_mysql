@@ -13,14 +13,14 @@ import pedromarineli.models.Aluno;
 import pedromarineli.repositories.AlunosRepository;
 
 @Controller
-@RequestMapping("/alunos")
-public class AlunosController {
+@RequestMapping("/generos")
+public class GenerosController {
     @Autowired
-    private AlunosRepository alunosRepo;
+    private GeneroRepository generoRepo;
 
     @RequestMapping("list")
     public String list(Model model) {
-        model.addAttribute("alunos", this.alunosRepo.findAll());
+        model.addAttribute("generos", this.generoRepo.findAll());
         return "list";
     }
 
@@ -30,47 +30,40 @@ public class AlunosController {
     }
 
     @RequestMapping(value = "insert", method = RequestMethod.POST)
-    public String insert(@RequestParam("nome") String nome, @RequestParam("idade") int idade, @RequestParam("curso") String curso) {
-        Aluno aluno = new Aluno();
-        aluno.setNome(nome);
-        aluno.setIdade(idade);
-        aluno.setCurso(curso);
-        alunosRepo.save(aluno);
-        return "redirect:/alunos/list";
+    public String insert(@RequestParam("nome") String nome) {
+        Genero genero = new Genero();
+        genero.setNome(nome);
+        return "redirect:/generos/list";
     }
 
     @RequestMapping("update/{id}")
     public String update(Model model, @PathVariable int id) {
-        Optional<Aluno> aluno = alunosRepo.findById(id);
-        model.addAttribute("aluno", aluno.get());
-        return "/alunos/update";
+        Optional<Genero> genero = generoRepo.findById(id);
+        model.addAttribute("genero", genero.get());
+        return "/generos/update";
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String saveUpdate(
         @RequestParam("nome") String nome,
-        @RequestParam("idade") int idade,
-        @RequestParam("curso") String curso,
         @RequestParam("id") int id) {
-            Optional<Aluno> aluno = alunosRepo.findById(id);
-            aluno.get().setNome(nome);
-            aluno.get().setIdade(idade);
-            aluno.get().setCurso(curso);
-            alunosRepo.save(aluno.get());
-            return "redirect:/alunos/list";
+            Optional<Genero> genero = generoRepo.findById(id);
+            genero.get().setNome(nome);
+            generoRepo.save(genero.get());
+            return "redirect:/generos/list";
     }
 
     @RequestMapping("delete/{id}")
     public String delete(Model model, @PathVariable int id) {
-        Optional<Aluno> aluno = alunosRepo.findById(id);
-        model.addAttribute("aluno", aluno.get());
-        return "/alunos/delete";
+        Optional<Genero> genero = generoRepo.findById(id);
+        model.addAttribute("genero", genero.get());
+        return "/generos/delete";
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public String saveDelete(@RequestParam("id") int id) {
-        alunosRepo.deleteById(id);
+        generoRepo.deleteById(id);
 
-        return "redirect:/alunos/list";
+        return "redirect:/generos/list";
     }
 }
